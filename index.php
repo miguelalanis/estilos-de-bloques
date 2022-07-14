@@ -24,10 +24,10 @@ if ( function_exists( 'register_block_style' ) ) {
 					'inline_style' => '
 					.is-style-blue-paragraph {  
 						background-color: #0087be;
-	                    color: #FFF;
-	                    padding: 16px;
-										}
-                        ',
+	                    			color: #FFF;
+	                    			padding: 16px;
+					}
+                        		',
 				)
 			
 			);
