@@ -1,84 +1,91 @@
-# Gutenberg Block Styles Plugin
+# Plugin de Estilos de Bloques Gutenberg
 
-## Overview
+## Resumen
 
-This repository is an introduction to one of the simplest forms of customization in the editor: Block Styles. Block Styles just add an extra classname to a block, so they're relatively simple to create and customize. 
+Este repositorio es una introducción a una de las formas más simples de personalización en el editor: Estilos de bloque. Los estilos de bloque sólo añaden un nombre de clase extra a un bloque, por lo que son relativamente sencillos de crear y personalizar. 
 
-![Block Styles Example](https://cldup.com/xpyaqSiB3h-3000x3000.png)
+Este sencillo plugin esta basado en el repositorio https://github.com/Automattic/gutenberg-block-styles con la diferencia que este plugin pone los estilos de bloques inline.
 
-Read more about block styles in this ThemeShaper post: 
+![Ejemplo de estilos de bloque](https://archive.org/download/block-styles-ejemplo/block-styles-ejemplo.png)
 
-[**📄 Customizing Gutenberg blocks with block styles**](https://themeshaper.com/2019/02/15/customizing-gutenberg-blocks-with-block-styles/)
+Lee más sobre los estilos de bloque en este post de ThemeShaper: 
 
-This repository is a WordPress plugin that includes a single custom block style. It's fairly barebones, and is meant to provide a boilerplate for more complicated plugins. The code here is a lightweight introduction to Gutenberg block customization, and doesn't require you to mess around with `npm`, themes, php, or (much) JavaScript. 
+[**📄 Personalización de los bloques de Gutenberg con estilos de bloque**](https://themeshaper.com/2019/02/15/customizing-gutenberg-blocks-with-block-styles/)
 
-All you really need to get started is: 
+Este repositorio es un plugin de WordPress que incluye un único estilo de bloque personalizado. Es bastante sencillo, y está destinado a proporcionar un punto de partida para plugins más complicados. El código aquí es una introducción ligera a la personalización de bloques de Gutenberg, y no requiere que te metas con `npm`, temas, php, o (mucho) JavaScript. 
 
-- The courage to edit a few lines in a single PHP file. 
-- Knowledge of CSS.
-- A WordPress site to upload this plugin to (Alternatively, you can run a single Terminal command to create a quick development environment instead).  
+Todo lo que realmente necesitas para empezar es: 
 
-## Customization
+- Editar unas pocas líneas en un solo archivo PHP. 
+- Conocimientos de CSS.
+- Un sitio de WordPress para subir este plugin.  
 
-Adding + editing block styles is a three step process: 
+## Personalización
 
-**1. Open up the `index.php` file and adjust the block type, name, and label for your new block style.**
+Añadir mas estilos de bloques es un proceso de tres pasos: 
 
-For example, the built-in example adds a "Blue Paragraph" block style to the core Paragraph block: 
+**1. Abre el archivo `index.php` y ajusta el tipo de bloque, el nombre y la etiqueta para tu nuevo estilo de bloque.**
 
-```php
-register_block_style(
-	'core/paragraph', // Block type name "paragraph" including namespace "core"
-	array(            // Properties of the style
-		'name'         => 'blue-paragraph',
-		'label'        => 'Blue Paragraph',
-		'style_handle' => 'block-styles-stylesheet',
-	)
-);
-```
-
-Here's another example, adding an "Awesome Cover" style to the Cover block: 
+Por ejemplo, el ejemplo incorporado añade un estilo de bloque "Párrafo azul" al bloque principal Párrafo: 
 
 ```php
 register_block_style(
-	'core/cover', // Block type name "cover" including namespace "core"
-	array(        // Properties of the style
-		'name'         => 'awesome-cover',
-		'label'        => 'Awesome Cover',
-		'style_handle' => 'block-styles-stylesheet',
-	)
+	'core/paragraph',
+		array(
+			'name'  => 'blue-paragraph',
+			'label' => __( 'Blue Paragraph', 'textdomain' ),
+			'inline_style' => '
+				.is-style-blue-paragraph {  
+					background-color: #0087be;
+					color: #FFF;
+					padding: 16px;
+				}
+			',
+		)		
 );
 ```
 
-* The block name in the second line should refer to the official title for the block.
-* The `name` Property should be lowercase letters with hyphens. It is used to generate the class for your block style.
-* The `label` Property should be human readable, and probably translatable.
-* The `style_handle` Property needs to be the handle of a style previously registered using `wp_register_style()`
+Aquí tenemos otro ejemplo, añadiendo un estilo "Sombra" al bloque de imagen:
 
-If you'd like to add multiple block styles in the same plugin, duplicate those 8 lines and replace the Properties.
+```php
+register_block_style(
+	'core/image', // Nombre del tipo de bloque "image" incluyendo "core/" antes
+		array( // Propiedades del estilo
+		'name'  => 'image-sombra',
+		'label' => __( 'Sombra', 'textdomain' ),
+		'inline_style' => // Estilos Inline
+            '
+			.is-style-image-sombra {
+				box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+				}',
+		)		
+);
+```
 
-**2. From there, add the CSS to style your new block style.**
+* El nombre del bloque en la segunda línea debe referirse al título oficial del bloque.
+* La propiedad `name` debe ser letras minúsculas con guiones. Se utiliza para generar la clase de su estilo de bloque.
+* La propiedad `label` debe ser legible y probablemente traducible.
+* La propiedad `inline_style` tiene que contener los estilos CSS.
 
-Block style classnames are automatically created using the following format: 
+Si quiere añadir varios estilos de bloque en el mismo plugin, duplique esas líneas hasta `);` y sustituya las Propiedades.
+
+**2. A partir de ahí, añade el CSS para dar estilo a tu nuevo estilo de bloque.**
+
+Los nombres de clase de los estilos de bloque se crean automáticamente con el siguiente formato: 
 
 `.is-style-[name]`
 
-`[name]` maps to the `name:` field from step 1. So the classnames for the two examples above would be: 
+El campo `[name]` corresponde al campo `name:` del paso 1.  Así que los nombres de clase para los dos ejemplos anteriores serían: 
 
 `.is-style-blue-paragraph`
-`.is-style-awesome-cover`
+`.is-style-image-sombra`.
 
-Open up the `style.css` file, and add any CSS styles for your block. Anything you declare should be added to both the front and back end automatically.
+Añada los estilos CSS entre `'inline_style' => '` y `',`. Todo lo que declare se añadirá automáticamente tanto en el front-end como en el editor.
 
-**3. Test your changes.**
+**3. Prueba los cambios.**
 
-Zip up the plugin with your changes and upload to your site, or if you'd prefer, test the changes in real-time using the included [Docker-powered dev environment](DOCKER.md). 🎉
+Comprima el plugin con sus cambios y súbalo a su sitio, o si lo prefiere, pruebe los cambios en tiempo real utilizando el editor de plugins en WordPress. 🎉
 
-## More Documentation
+## ¿Preguntas? 
 
-- [Block Style Variations](https://developer.wordpress.org/block-editor/developers/filters/block-filters/#block-style-variations) in the Block Editor Handbook
-- [Server-side Registration Helper](https://developer.wordpress.org/block-editor/developers/filters/block-filters/#server-side-registration-helper) in the Block Editor Handbook (This is the method of registration used in these examples.)
-
-## Questions? 
-
-Happy to help! Open an issue (or a PR!), ping `@kjellr` on twitter, or `@kjellr` on WordPress.org slack. 
+Estaré encantado de ayudarte. Abre una incidencia, envía un mensaje a `@miguelalanispro` en twitter, o a `@miguelalanis` en Tel
