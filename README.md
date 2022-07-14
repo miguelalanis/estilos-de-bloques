@@ -88,4 +88,4 @@ Comprima el plugin con sus cambios y súbalo a su sitio, o si lo prefiere, prueb
 
 ## ¿Preguntas? 
 
-Estaré encantado de ayudarte. Abre una incidencia, envía un mensaje a `@miguelalanispro` en twitter, o a `@miguelalanis` en Tel
+Estaré encantado de ayudarte. Abre una incidencia, envía un mensaje a `@miguelalanispro` en twitter, o a `@miguelalanis` en Telegram
